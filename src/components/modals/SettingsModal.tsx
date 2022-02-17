@@ -12,7 +12,6 @@ type Props = {
   handleHighContrastMode: Function
 }
 
-type State = {}
 
 export const SettingsModal = ({
   isOpen,
