@@ -4,12 +4,8 @@ import { SettingsToggle } from './SettingsToggle'
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  isHardMode: boolean
-  handleHardMode: Function
   isDarkMode: boolean
   handleDarkMode: Function
-  isHighContrastMode: boolean
-  handleHighContrastMode: Function
 }
 
 

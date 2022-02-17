@@ -16,7 +16,6 @@ import {
   NOT_ENOUGH_LETTERS_MESSAGE,
   WORD_NOT_FOUND_MESSAGE,
   CORRECT_WORD_MESSAGE,
-  HARD_MODE_ALERT_MESSAGE,
 } from '../constants/strings'
 import {
   MAX_WORD_LENGTH,
@@ -35,8 +34,6 @@ import { addStatsForCompletedGame, loadStats } from '../lib/stats'
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
-  setStoredIsHighContrastMode,
-  getStoredIsHighContrastMode,
 } from '../lib/localStorage'
 
 import '../App.css'
@@ -62,9 +59,6 @@ function Daily() {
       ? localStorage.getItem('theme') === 'dark'
       : prefersDarkMode
   )
-  const [isHighContrastMode, setIsHighContrastMode] = useState(
-    getStoredIsHighContrastMode()
-  )
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
@@ -86,12 +80,6 @@ function Daily() {
 
   const [stats, setStats] = useState(() => loadStats())
 
-  const [isHardMode, setIsHardMode] = useState(
-    localStorage.getItem('gameMode')
-      ? localStorage.getItem('gameMode') === 'hard'
-      : false
-  )
-
   useEffect(() => {
     // if no game state on load,
     // show the user the how-to info modal
@@ -112,31 +100,11 @@ function Daily() {
     } else {
       document.documentElement.classList.remove('dark')
     }
-
-    if (isHighContrastMode) {
-      document.documentElement.classList.add('high-contrast')
-    } else {
-      document.documentElement.classList.remove('high-contrast')
-    }
-  }, [isDarkMode, isHighContrastMode])
+  }, [isDarkMode])
 
   const handleDarkMode = (isDark: boolean) => {
     setIsDarkMode(isDark)
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }
-
-  const handleHardMode = (isHard: boolean) => {
-    if (guesses.length === 0 || localStorage.getItem('gameMode') === 'hard') {
-      setIsHardMode(isHard)
-      localStorage.setItem('gameMode', isHard ? 'hard' : 'normal')
-    } else {
-      showErrorAlert(HARD_MODE_ALERT_MESSAGE)
-    }
-  }
-
-  const handleHighContrastMode = (isHighContrast: boolean) => {
-    setIsHighContrastMode(isHighContrast)
-    setStoredIsHighContrastMode(isHighContrast)
   }
 
   useEffect(() => {
@@ -197,15 +165,13 @@ function Daily() {
     }
 
     // enforce hard mode - all guesses must contain all previously revealed letters
-    if (isHardMode) {
-      const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses)
-      if (firstMissingReveal) {
-        showErrorAlert(firstMissingReveal)
-        setCurrentRowClass('jiggle')
-        return setTimeout(() => {
-          setCurrentRowClass('')
-        }, ALERT_TIME_MS)
-      }
+    const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses)
+    if (firstMissingReveal) {
+      showErrorAlert(firstMissingReveal)
+      setCurrentRowClass('jiggle')
+      return setTimeout(() => {
+        setCurrentRowClass('')
+      }, ALERT_TIME_MS)
     }
 
     setIsRevealing(true)
@@ -285,17 +251,12 @@ function Daily() {
         isGameLost={isGameLost}
         isGameWon={isGameWon}
         handleShare={() => showSuccessAlert(GAME_COPIED_MESSAGE)}
-        isHardMode={isHardMode}
       />
       <SettingsModal
         isOpen={isSettingsModalOpen}
         handleClose={() => setIsSettingsModalOpen(false)}
-        isHardMode={isHardMode}
-        handleHardMode={handleHardMode}
         isDarkMode={isDarkMode}
         handleDarkMode={handleDarkMode}
-        isHighContrastMode={isHighContrastMode}
-        handleHighContrastMode={handleHighContrastMode}
       />
 
       <AlertContainer />

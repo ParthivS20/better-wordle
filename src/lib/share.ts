@@ -6,12 +6,11 @@ import { MAX_CHALLENGES } from '../constants/settings'
 export const shareStatus = (
   guesses: string[],
   lost: boolean,
-  isHardMode: boolean
 ) => {
   navigator.clipboard.writeText(
     `${GAME_TITLE} ${solutionIndex} ${
       lost ? 'X' : guesses.length
-    }/${MAX_CHALLENGES}${isHardMode ? '*' : ''}\n\n` +
+    }/${MAX_CHALLENGES}\n\n` +
       generateEmojiGrid(guesses)
   )
 }
