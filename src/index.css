@@ -53,9 +53,37 @@
   animation-fill-mode: backwards;
 }
 
-svg:hover {
-  animation: float infinite;
-  animation-duration: var(--animation-speed);
+.faIcon, .heroIcon, .key {
+  font-size: 0.85em;
+  color: black;
+
+  -moz-transition: all 0.1s;
+  -webkit-transition: all 0.1s;
+  -o-transition: all 0.1s;
+  -ms-transition: all 0.1s;
+  transition: all 0.1s;
+}
+
+.dark.faIcon, .dark.heroIcon, .dark.key {
+  color: white;
+}
+
+.faIcon {
+  font-size: 1.2em;
+}
+
+.heroIcon:hover, .key:hover, .key:hover > .faIcon {
+  transform: scale(1.05);
+  color: #fafafa;
+}
+
+.black.heroIcon:hover, .black.key:hover, .black.key:hover > .faIcon {
+  transform: scale(1.05);
+  color: #b4b4b4;
+}
+
+.heroIcon:hover, .key:hover {
+  font-size: 1em;
 }
 
 .jiggle {
