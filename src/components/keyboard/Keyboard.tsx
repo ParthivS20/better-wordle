@@ -1,6 +1,8 @@
 import { getStatuses } from '../../lib/statuses'
 import { Key } from './Key'
 import { useEffect } from 'react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightToBracket, faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   onChar: (value: string) => void
@@ -74,7 +76,7 @@ export const Keyboard = ({
       </div>
       <div className="flex justify-center">
         <Key width={65.4} value="DELETE" onClick={onClick}>
-          {'Delete'}
+          <FontAwesomeIcon icon={faDeleteLeft} className={"faIcon"} />
         </Key>
         {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
           <Key
@@ -86,7 +88,7 @@ export const Keyboard = ({
           />
         ))}
         <Key width={65.4} value="ENTER" onClick={onClick}>
-          {'Enter'}
+          <FontAwesomeIcon icon={faArrowRightToBracket} className={"faIcon"}/>
         </Key>
       </div>
     </div>
