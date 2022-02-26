@@ -93,7 +93,7 @@ export const Keyboard = ({
           />
         ))}
         <Key width={65.4} value="DELETE" onClick={onClick} isDarkMode={isDarkMode}>
-          <FontAwesomeIcon icon={faDeleteLeft} className={"faIcon"} />
+          <FontAwesomeIcon icon={faDeleteLeft} className={"faIcon" + isDarkMode ? " dark" : ""} />
         </Key>
       </div>
     </div>

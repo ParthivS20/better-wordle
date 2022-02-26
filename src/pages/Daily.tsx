@@ -41,27 +41,27 @@ import { AlertContainer } from '../components/alerts/AlertContainer'
 import { useAlert } from '../context/AlertContext'
 
 function Daily() {
-  const prefersDarkMode = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  ).matches
-
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
-    useAlert()
+      useAlert()
+  const [isDarkMode, setIsDarkMode] = useState(
+      localStorage.getItem('theme')
+          ? localStorage.getItem('theme') === 'dark'
+          : window.matchMedia(
+              '(prefers-color-scheme: dark)'
+          ).matches
+  )
   const [currentGuess, setCurrentGuess] = useState('')
   const [isGameWon, setIsGameWon] = useState(false)
+  const [isGameLost, setIsGameLost] = useState(false)
+
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+
   const [currentRowClass, setCurrentRowClass] = useState('')
-  const [isGameLost, setIsGameLost] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem('theme')
-      ? localStorage.getItem('theme') === 'dark'
-      : prefersDarkMode
-  )
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
-    const loaded = loadGameStateFromLocalStorage()
+  const loaded = loadGameStateFromLocalStorage()
     if (loaded?.solution !== solution) {
       return []
     }
@@ -81,18 +81,14 @@ function Daily() {
   const [stats, setStats] = useState(() => loadStats())
 
   useEffect(() => {
-    // if no game state on load,
-    // show the user the how-to info modal
+    document.title = "Wordle Daily";
+  });
+
+  useEffect(() => {
     if (!loadGameStateFromLocalStorage()) {
       setIsInfoModalOpen(true)
     }
   }, [])
-
-  useEffect(() => {
-    // This will run when the page first loads and whenever the title changes
-    document.title = "Wordle Daily";
-  });
-
 
   useEffect(() => {
     if (isDarkMode) {
@@ -214,15 +210,15 @@ function Daily() {
           {GAME_TITLE}
         </h1>
         <InformationCircleIcon
-          className="h-6 w-6 mr-2 cursor-pointer heroIcon"
+          className="h-6 w-6 mr-2 cursor-pointer dark:stroke-white"
           onClick={() => setIsInfoModalOpen(true)}
         />
         <ChartBarIcon
-          className="h-6 w-6 mr-3 cursor-pointer heroIcon"
+          className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
           onClick={() => setIsStatsModalOpen(true)}
         />
         <CogIcon
-          className="h-6 w-6 mr-3 cursor-pointer heroIcon"
+          className="h-6 w-6 mr-3 cursor-pointer dark:stroke-white"
           onClick={() => setIsSettingsModalOpen(true)}
         />
       </div>
@@ -259,7 +255,6 @@ function Daily() {
         isDarkMode={isDarkMode}
         handleDarkMode={handleDarkMode}
       />
-
       <AlertContainer />
     </div>
   )
